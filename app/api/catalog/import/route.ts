@@ -1,0 +1,3 @@
+import {NextRequest,NextResponse} from "next/server";
+import {normalizeSupplierProduct} from "@/lib/importer";
+export async function POST(request:NextRequest){const body=await request.json();if(!body?.product?.supplierId||typeof body.product.price!=="number")return NextResponse.json({error:"A supplier product with supplierId and numeric price is required"},{status:400});const defaults={category:body.category??"Uncategorized",shippingCost:Number(body.shippingCost??0),duties:Number(body.duties??0),paymentFees:Number(body.paymentFees??0),operatingCost:Number(body.operatingCost??0),targetMargin:Number(body.targetMargin??.3)};return NextResponse.json({product:normalizeSupplierProduct(body.product,defaults)})}
