@@ -1,0 +1,4 @@
+import {CatalogProduct,priceCatalogProduct,slugify} from "@/lib/catalog";
+import {SupplierProduct} from "@/lib/supplier";
+export type ImportDefaults={category:string;shippingCost:number;duties:number;paymentFees:number;operatingCost:number;targetMargin:number};
+export function normalizeSupplierProduct(item:SupplierProduct,defaults:ImportDefaults):CatalogProduct{const base={id:`supplier-${item.supplierId}-${item.supplierId}`,sku:`SUP-${item.supplierId}`.toUpperCase(),name:item.title,slug:slugify(item.title),category:defaults.category,description:item.description??"",supplierId:item.supplierId,supplierProductId:item.supplierId,supplierCost:item.price,shippingCost:defaults.shippingCost,duties:defaults.duties,paymentFees:defaults.paymentFees,operatingCost:defaults.operatingCost,targetMargin:defaults.targetMargin,currency:"ZAR" as const,stock:item.stock??0,status:"draft" as const,images:item.images??[],sourceUrl:item.sourceUrl};return priceCatalogProduct(base)}
