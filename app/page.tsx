@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import {createClient} from "@/lib/supabase/client";
 
 type Product = { id:string; name:string; category:string; price:number; oldPrice?:number; badge?:string; image:string; stock?:number };
 
@@ -38,23 +39,24 @@ export default function Home(){
 
  useEffect(()=>{
    let cancelled=false;
-   fetch("/api/catalog")
-     .then(async response=>{
-       if(!response.ok) throw new Error("Catalogue unavailable");
-       return response.json();
-     })
-     .then(payload=>{
-       if(cancelled || !Array.isArray(payload.products) || payload.products.length===0) return;
-       const live=payload.products
-         .filter((p:any)=>p.status==="active")
-         .map((p:any):Product=>({
-           id:String(p.id),name:String(p.name),category:String(p.category),price:Number(p.retailPrice),
-           image:Array.isArray(p.images)&&p.images[0]?String(p.images[0]):"https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=900&q=80",
-           stock:Number(p.stock??0)
-         }));
-       if(!cancelled && live.length>0){setProducts(live);setCatalogReady(true);}
-     })
-     .catch(()=>{});
+   const supabase=createClient();
+   supabase
+     .from("products")
+     .select("id,name,category,retail_price,stock,images,status")
+     .eq("status","active")
+     .order("created_at",{ascending:false})
+     .then(({data,error})=>{
+       if(cancelled || error || !data?.length) return;
+       const live=data.map((p:any):Product=>({
+         id:String(p.id),
+         name:String(p.name),
+         category:String(p.category),
+         price:Number(p.retail_price),
+         image:Array.isArray(p.images)&&p.images[0]?String(p.images[0]):"https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=900&q=80",
+         stock:Number(p.stock??0)
+       }));
+       if(!cancelled){setProducts(live);setCatalogReady(true);}
+     });
    return ()=>{cancelled=true;};
  },[]);
 
