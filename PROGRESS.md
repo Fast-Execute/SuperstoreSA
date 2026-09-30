@@ -1,6 +1,6 @@
 # SuperstoreSA — Build Progress
 
-**Overall progress: 28%**
+**Overall progress: 43%**
 
 ## Completed
 - [x] Repository identified and verified
@@ -16,13 +16,21 @@
 - [x] Central product data model
 - [x] SKU and inventory fields
 - [x] Admin catalogue view and search
+- [x] Add-product validation workflow
 - [x] Shared cart-line utilities
+- [x] Catalogue pricing model
+- [x] Supplier product normalization
+- [x] Import preview API
+- [x] Admin supplier import preview
+- [x] Persistent database schema foundation
+- [x] Database indexes and product status model
+- [x] Environment-variable template for database, supplier and payment integrations
 
 ## Remaining
-- [ ] Real product database
-- [ ] Admin catalogue CRUD
+- [ ] Connect production database
+- [ ] Persistent admin catalogue CRUD
 - [ ] Authorized Alibaba supplier connector
-- [ ] Product import/normalization pipeline
+- [ ] Live product import
 - [ ] Inventory synchronization
 - [ ] Full cart drawer/page
 - [ ] Customer accounts
