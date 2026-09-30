@@ -1,7 +1,10 @@
 import {NextRequest,NextResponse} from "next/server";
 import {findCatalog,updateCatalog,validateCatalogProduct} from "@/lib/catalog-store";
+import {requireAdmin} from "@/lib/supabase/server";
 
 export async function GET(_request:NextRequest,{params}:{params:Promise<{id:string}>}){
+  const {authorized}=await requireAdmin();
+  if(!authorized) return NextResponse.json({error:"Admin authentication required"},{status:401});
   const {id}=await params;
   try{
     const product=await findCatalog(id,true);
@@ -12,6 +15,8 @@ export async function GET(_request:NextRequest,{params}:{params:Promise<{id:stri
 }
 
 export async function PUT(request:NextRequest,{params}:{params:Promise<{id:string}>}){
+  const {authorized}=await requireAdmin();
+  if(!authorized) return NextResponse.json({error:"Admin authentication required"},{status:401});
   const {id}=await params;
   try{
     const patch=validateCatalogProduct(await request.json());
