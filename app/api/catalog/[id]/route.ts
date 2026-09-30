@@ -1,0 +1,4 @@
+import {NextRequest,NextResponse} from "next/server";
+import {findCatalog,validateCatalogProduct} from "@/lib/catalog-store";
+export async function GET(_request:NextRequest,{params}:{params:Promise<{id:string}>}){const {id}=await params;const product=findCatalog(id);return product?NextResponse.json({product}):NextResponse.json({error:"Product not found"},{status:404})}
+export async function PUT(request:NextRequest,{params}:{params:Promise<{id:string}>}){const {id}=await params;const existing=findCatalog(id);if(!existing)return NextResponse.json({error:"Product not found"},{status:404});try{const patch=validateCatalogProduct(await request.json());return NextResponse.json({product:{...existing,...patch,id}})}catch(error){return NextResponse.json({error:error instanceof Error?error.message:"Invalid product"},{status:400})}}
