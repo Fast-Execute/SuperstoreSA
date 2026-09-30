@@ -1,7 +1,10 @@
 import {NextRequest,NextResponse} from "next/server";
 import {createCatalog,listCatalog,validateCatalogProduct} from "@/lib/catalog-store";
 
-export async function GET(){return NextResponse.json({products:await listCatalog(true)});}
+export async function GET(){
+  try{return NextResponse.json({products:await listCatalog(true)});}
+  catch(error){return NextResponse.json({error:error instanceof Error?error.message:"Unable to load catalogue"},{status:503});}
+}
 
 export async function POST(request:NextRequest){
   try{
@@ -9,8 +12,8 @@ export async function POST(request:NextRequest){
     const product=validateCatalogProduct(body);
     const saved=await createCatalog({
       id:String(body.id ?? crypto.randomUUID()),
-      sku:String(product.sku),
-      name:String(product.name),
+      sku:String(product.sku).trim().toUpperCase(),
+      name:String(product.name).trim(),
       slug:String(product.slug),
       category:String(product.category),
       description:String(product.description ?? ""),
@@ -30,5 +33,9 @@ export async function POST(request:NextRequest){
       sourceUrl:product.sourceUrl
     });
     return NextResponse.json({message:"Product saved to Supabase",product:saved},{status:201});
-  }catch(error){return NextResponse.json({error:error instanceof Error?error.message:"Unable to save product"},{status:400});}
+  }catch(error){
+    const message=error instanceof Error?error.message:"Unable to save product";
+    const status=/required|valid|non-negative/i.test(message)?400:503;
+    return NextResponse.json({error:message},{status});
+  }
 }
