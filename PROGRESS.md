@@ -1,6 +1,6 @@
 # SuperstoreSA — Build Progress
 
-**Overall progress: 43%**
+**Overall progress: 44%**
 
 ## Completed
 - [x] Repository identified and verified
@@ -25,9 +25,11 @@
 - [x] Persistent database schema foundation
 - [x] Database indexes and product status model
 - [x] Environment-variable template for database, supplier and payment integrations
+- [x] Supabase client wiring and server-side catalogue CRUD implementation
+- [x] Seven-tap logo route to the admin area
 
 ## Remaining
-- [ ] Connect production database
+- [ ] Connect production Supabase project and run migrations
 - [ ] Persistent admin catalogue CRUD
 - [ ] Authorized Alibaba supplier connector
 - [ ] Live product import
