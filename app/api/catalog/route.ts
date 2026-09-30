@@ -1,12 +1,18 @@
 import {NextRequest,NextResponse} from "next/server";
 import {createCatalog,listCatalog,validateCatalogProduct} from "@/lib/catalog-store";
+import {requireAdmin} from "@/lib/supabase/server";
 
 export async function GET(){
+  const {authorized}=await requireAdmin();
+  if(!authorized) return NextResponse.json({error:"Admin authentication required"},{status:401});
   try{return NextResponse.json({products:await listCatalog(true)});}
   catch(error){return NextResponse.json({error:error instanceof Error?error.message:"Unable to load catalogue"},{status:503});}
 }
 
 export async function POST(request:NextRequest){
+  const {authorized}=await requireAdmin();
+  if(!authorized) return NextResponse.json({error:"Admin authentication required"},{status:401});
+
   try{
     const body=await request.json();
     const product=validateCatalogProduct(body);
