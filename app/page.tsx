@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 
 type Product = { id:string; name:string; category:string; price:number; oldPrice?:number; badge?:string; image:string };
 
@@ -16,12 +16,15 @@ const categories=["All","Tech","Home & Tools","Lifestyle"];
 const money=(v:number)=>new Intl.NumberFormat("en-ZA",{style:"currency",currency:"ZAR",maximumFractionDigits:0}).format(v);
 
 export default function Home(){
- const [category,setCategory]=useState("All"); const [query,setQuery]=useState(""); const [cart,setCart]=useState<string[]>([]);
+ const [category,setCategory]=useState("All");
+ const [logoTaps,setLogoTaps]=useState(0);
+ const tapTimer=useRef<ReturnType<typeof setTimeout>|null>(null);
+ const handleLogoTap=(event:React.MouseEvent)=>{event.preventDefault();setLogoTaps(n=>{const next=n+1;if(tapTimer.current)clearTimeout(tapTimer.current);if(next>=7){window.location.href="/admin";return 0;}tapTimer.current=setTimeout(()=>setLogoTaps(0),1800);return next;});}; const [query,setQuery]=useState(""); const [cart,setCart]=useState<string[]>([]);
  const visible=useMemo(()=>products.filter(p=>(category==="All"||p.category===category)&&p.name.toLowerCase().includes(query.toLowerCase())),[category,query]);
  return <main>
   <div className="announcement">🇿🇦 Built for South Africa · Secure checkout coming next</div>
   <header className="header shell">
-   <a className="logo" href="#"><span className="logoMark">S</span> SUPERSTORE<span className="logoSA">SA</span></a>
+   <a className="logo" href="#" onClick={handleLogoTap} aria-label="SuperstoreSA logo"><span className="logoMark">S</span> SUPERSTORE<span className="logoSA">SA</span></a>
    <div className="search"><span>⌕</span><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search products..." aria-label="Search products"/></div>
    <button className="cart">Cart <b>{cart.length}</b></button>
   </header>
