@@ -1,6 +1,6 @@
 # SuperstoreSA — Build Progress
 
-**Overall progress: 45%**
+**Overall progress: 46%**
 
 ## Completed
 - [x] Repository identified and verified
@@ -29,6 +29,8 @@
 - [x] Seven-tap logo route to the admin area
 - [x] Admin product creation payload and persistence UI
 - [x] Explicit Supabase configuration/database error handling
+- [x] Storefront catalogue API integration
+- [x] Supplier product ID normalization and import contract hardening
 
 ## Remaining
 - [ ] Connect production Supabase project and run migrations
