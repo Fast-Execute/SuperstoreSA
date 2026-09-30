@@ -1,6 +1,6 @@
 # SuperstoreSA — Build Progress
 
-**Overall progress: 44%**
+**Overall progress: 45%**
 
 ## Completed
 - [x] Repository identified and verified
@@ -27,6 +27,8 @@
 - [x] Environment-variable template for database, supplier and payment integrations
 - [x] Supabase client wiring and server-side catalogue CRUD implementation
 - [x] Seven-tap logo route to the admin area
+- [x] Admin product creation payload and persistence UI
+- [x] Explicit Supabase configuration/database error handling
 
 ## Remaining
 - [ ] Connect production Supabase project and run migrations
