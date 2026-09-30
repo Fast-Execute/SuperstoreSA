@@ -1,6 +1,6 @@
 # SuperstoreSA — Build Progress
 
-**Overall progress: 20%**
+**Overall progress: 28%**
 
 ## Completed
 - [x] Repository identified and verified
@@ -13,6 +13,10 @@
 - [x] Supplier adapter foundation
 - [x] Pricing API foundation
 - [x] Admin pricing cockpit
+- [x] Central product data model
+- [x] SKU and inventory fields
+- [x] Admin catalogue view and search
+- [x] Shared cart-line utilities
 
 ## Remaining
 - [ ] Real product database
@@ -20,7 +24,7 @@
 - [ ] Authorized Alibaba supplier connector
 - [ ] Product import/normalization pipeline
 - [ ] Inventory synchronization
-- [ ] Full cart
+- [ ] Full cart drawer/page
 - [ ] Customer accounts
 - [ ] Checkout
 - [ ] South African payment provider
