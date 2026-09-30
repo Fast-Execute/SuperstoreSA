@@ -32,3 +32,13 @@ create index if not exists products_supplier_idx on public.products(supplier_id)
 
 alter table public.products enable row level security;
 create policy "public can read active products" on public.products for select using (status = 'active');
+
+
+create or replace function public.set_products_updated_at()
+returns trigger language plpgsql as $$
+begin new.updated_at = now(); return new; end;
+$$;
+
+ drop trigger if exists products_updated_at on public.products;
+create trigger products_updated_at before update on public.products
+for each row execute function public.set_products_updated_at();
