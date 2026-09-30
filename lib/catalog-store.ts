@@ -10,9 +10,10 @@ const seed: CatalogProduct[] = products.map(p => ({
 }));
 
 export function validateCatalogProduct(input: Partial<CatalogProduct>) {
-  if (!input.name || !input.sku || !input.slug || !input.category || typeof input.retailPrice !== "number") {
-    throw new Error("name, sku, slug, category and retailPrice are required");
+  if (!input.name || !input.sku || !input.slug || !input.category || typeof input.retailPrice !== "number" || !Number.isFinite(input.retailPrice) || input.retailPrice < 0) {
+    throw new Error("name, sku, slug, category and a valid retailPrice are required");
   }
+  if (input.stock !== undefined && (!Number.isFinite(input.stock) || input.stock < 0)) throw new Error("stock must be a non-negative number");
   return input;
 }
 
@@ -28,27 +29,30 @@ function fromRow(row: Record<string, unknown>): CatalogProduct {
   };
 }
 
+function hasSupabaseConfig(){
+  return Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY);
+}
+
 export async function listCatalog(admin=false) {
-  try {
-    const client = admin ? getSupabaseAdmin() : getSupabasePublic();
-    const query = client.from("products").select("*").order("created_at",{ascending:false});
-    const {data,error}=await query;
-    if(error) throw error;
-    return (data ?? []).map(fromRow);
-  } catch {
-    return seed;
+  if(!hasSupabaseConfig()){
+    if(process.env.NODE_ENV!=="production") return seed;
+    throw new Error("Supabase is not configured. Set the required environment variables.");
   }
+  const client = admin ? getSupabaseAdmin() : getSupabasePublic();
+  const {data,error}=await client.from("products").select("*").order("created_at",{ascending:false});
+  if(error) throw error;
+  return (data ?? []).map(fromRow);
 }
 
 export async function findCatalog(id:string, admin=false) {
-  try {
-    const client=admin?getSupabaseAdmin():getSupabasePublic();
-    const {data,error}=await client.from("products").select("*").eq("id",id).maybeSingle();
-    if(error) throw error;
-    return data ? fromRow(data) : null;
-  } catch {
-    return seed.find(p=>p.id===id) ?? null;
+  if(!hasSupabaseConfig()){
+    if(process.env.NODE_ENV!=="production") return seed.find(p=>p.id===id) ?? null;
+    throw new Error("Supabase is not configured. Set the required environment variables.");
   }
+  const client=admin?getSupabaseAdmin():getSupabasePublic();
+  const {data,error}=await client.from("products").select("*").eq("id",id).maybeSingle();
+  if(error) throw error;
+  return data ? fromRow(data) : null;
 }
 
 export async function createCatalog(input:CatalogProduct) {
