@@ -1,0 +1,4 @@
+import {calculateRetailPrice} from "@/lib/pricing";
+export type CatalogProduct={id:string;sku:string;name:string;slug:string;category:string;description:string;supplierId:string;supplierProductId:string;supplierCost:number;shippingCost:number;duties:number;paymentFees:number;operatingCost:number;targetMargin:number;retailPrice:number;currency:"ZAR";stock:number;status:"draft"|"active"|"archived";images:string[];sourceUrl?:string};
+export function priceCatalogProduct(input:Omit<CatalogProduct,"retailPrice">){return {...input,retailPrice:calculateRetailPrice({supplierCost:input.supplierCost,shipping:input.shippingCost,duties:input.duties,paymentFees:input.paymentFees,operatingCost:input.operatingCost,targetMargin:input.targetMargin}).retailPrice};}
+export function slugify(value:string){return value.toLowerCase().trim().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");}
