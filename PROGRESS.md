@@ -1,6 +1,6 @@
 # SuperstoreSA — Build Progress
 
-**Overall progress: 46%**
+**Overall progress: 58%**
 
 ## Completed
 - [x] Repository identified and verified
@@ -31,6 +31,9 @@
 - [x] Explicit Supabase configuration/database error handling
 - [x] Storefront catalogue API integration
 - [x] Supplier product ID normalization and import contract hardening
+- [x] Storefront order schema and supplier-order persistence
+- [x] Local checkout order creation API
+- [x] Order retrieval API
 
 ## Remaining
 - [ ] Connect production Supabase project and run migrations
@@ -40,8 +43,7 @@
 - [ ] Inventory synchronization
 - [ ] Full cart drawer/page
 - [ ] Customer accounts
-- [ ] Checkout
-- [ ] South African payment provider
+- [ ] Checkout UX and payment provider
 - [ ] Shipping/fulfilment
 - [ ] Orders and returns
 - [ ] Promotions/coupons
