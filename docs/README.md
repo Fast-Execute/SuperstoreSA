@@ -1,0 +1,10 @@
+# SuperstoreSA Integration Docs
+
+This folder contains the exact import and supplier-order design for the current repo.
+
+- [PRODUCT_IMPORT_FLOW.md](./PRODUCT_IMPORT_FLOW.md)
+- [SUPPLIER_ORDER_ENDPOINT.md](./SUPPLIER_ORDER_ENDPOINT.md)
+- [SUPABASE_SCHEMA.md](./SUPABASE_SCHEMA.md)
+- [ALIBABA_REQUEST_FORMAT.md](./ALIBABA_REQUEST_FORMAT.md)
+- [STORE_FRONT_TO_SUPPLIER_ORDER_WORKFLOW.md](./STORE_FRONT_TO_SUPPLIER_ORDER_WORKFLOW.md)
+
