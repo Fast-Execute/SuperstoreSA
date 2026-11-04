@@ -1,0 +1,56 @@
+name: Scheduled product sync
+
+# Refreshes supplier prices and stock by calling POST /api/alibaba/sync once an hour.
+# Scheduled workflows only run from the default branch (main).
+#
+# Required repository secrets (Settings -> Secrets and variables -> Actions):
+#   SITE_URL      the deployed site, e.g. https://superstoresa.example.com
+#   SYNC_API_KEY  must match SYNC_API_KEY in the deployed app's environment
+# Until both are set, the job logs a notice and exits successfully.
+
+on:
+  schedule:
+    - cron: "17 * * * *" # minute 17: GitHub delays runs queued at the top of the hour
+  workflow_dispatch:
+
+concurrency:
+  group: product-sync
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Trigger product sync
+        env:
+          SITE_URL: ${{ secrets.SITE_URL }}
+          SYNC_API_KEY: ${{ secrets.SYNC_API_KEY }}
+        run: |
+          if [ -z "$SITE_URL" ] || [ -z "$SYNC_API_KEY" ]; then
+            echo "::notice::SITE_URL and/or SYNC_API_KEY secrets are not set, so the sync was skipped."
+            exit 0
+          fi
+
+          status=$(curl --silent --show-error \
+            --max-time 120 --retry 2 --retry-delay 15 \
+            --output response.json --write-out '%{http_code}' \
+            --request POST "${SITE_URL%/}/api/alibaba/sync" \
+            --header "Authorization: Bearer ${SYNC_API_KEY}" \
+            --header "Content-Type: application/json" \
+            --data '{"action":"sync"}') || {
+              echo "::error::Could not reach the site (curl failed)."
+              exit 1
+            }
+
+          echo "HTTP ${status}"
+          cat response.json
+          echo
+
+          if [ "$status" -lt 200 ] || [ "$status" -ge 300 ]; then
+            echo "::error::Product sync failed with HTTP ${status}."
+            exit 1
+          fi

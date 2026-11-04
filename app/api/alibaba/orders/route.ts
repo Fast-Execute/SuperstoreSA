@@ -21,6 +21,7 @@ export async function POST(request: NextRequest) {
         id?: string;
         product_id?: string;
         alibaba_id?: string;
+        alibabaProductId?: string;
         title?: string;
         quantity?: number;
         unit_price?: number;

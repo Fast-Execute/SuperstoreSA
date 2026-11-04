@@ -6,18 +6,36 @@ on:
   pull_request:
     branches: ["main"]
 
+# Cancel a superseded run when new commits are pushed to the same branch or PR.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: npm
+          # @supabase/supabase-js 2.118+ requires Node >= 22. Use Node 22 in production hosting too.
+          node-version: 22
+          # No `cache: npm` here: it requires a committed package-lock.json, and this repo doesn't have one yet.
+          # Once you commit a lockfile, add `cache: npm` back and switch the next step to `npm ci`.
       - name: Install dependencies
         run: npm install
+      # `next build` also runs the TypeScript type check.
       - name: Build
         run: npm run build
+        env:
+          # Placeholders so modules that read env vars at import time can be built. Not real credentials.
+          NEXT_PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: placeholder
+          SUPABASE_SERVICE_ROLE_KEY: placeholder
+          SUPABASE_SECRET_KEY: placeholder
