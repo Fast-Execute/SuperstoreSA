@@ -52,6 +52,17 @@ export class ProductSyncEngine {
       return;
     }
 
+    await this.runOnce();
+  }
+
+  /**
+   * Run a single sync pass and return the job summary.
+   *
+   * Use this from an external scheduler (the "Scheduled product sync" GitHub Actions workflow
+   * calls it through POST /api/alibaba/sync). Unlike startSync(), it does not depend on an
+   * in-process timer, which does not survive on serverless hosting.
+   */
+  async runOnce(): Promise<SyncJob> {
     const job: SyncJob = {
       id: `sync-${Date.now()}`,
       status: 'running',
@@ -119,6 +130,8 @@ export class ProductSyncEngine {
       job.completedAt = new Date();
       await supabase.from('sync_jobs').insert([job]);
     }
+
+    return job;
   }
 
   async importProducts(options: { keyword: string; pageSize?: number; markup?: number }): Promise<number> {

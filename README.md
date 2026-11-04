@@ -19,9 +19,23 @@ npm run dev
 
 ## Alibaba sync flow
 
+All calls to `/api/alibaba/sync` need the header `Authorization: Bearer <SYNC_API_KEY>`. If `SYNC_API_KEY` is not set on the server, the endpoint refuses every request.
+
 1. Import products from Alibaba using `/api/alibaba/sync` with action `import`.
-2. Start the recurring sync job with `/api/alibaba/sync` and action `start`.
+2. Keep prices and stock fresh with action `sync`, which runs one sync pass. This is called automatically every hour by the **Scheduled product sync** GitHub Actions workflow (see below). The `start` action uses an in-process timer that does not work on serverless hosting.
 3. When a customer places an order, call `/api/alibaba/orders` to generate a supplier order.
+
+## Automation
+
+| Workflow | When | What it does |
+|---|---|---|
+| `ci.yml` | Every push to `main` and every pull request | Installs and builds the app (includes the TypeScript check) |
+| `scheduled-sync.yml` | Hourly, and on demand from the Actions tab | Calls `POST /api/alibaba/sync` with `{"action":"sync"}`. The run fails (and GitHub emails you) if the site is unreachable or the sync fails |
+| `dependabot.yml` | Weekly | Opens pull requests for npm and GitHub Actions updates |
+
+To switch on the scheduled sync, add two repository secrets (Settings → Secrets and variables → Actions): `SITE_URL` (the deployed site) and `SYNC_API_KEY` (same value as the app's `SYNC_API_KEY`). Until both exist the job skips itself without failing. Scheduled workflows only run from `main`.
+
+The sync route reads `SUPABASE_SERVICE_ROLE_KEY` and `ALIBABA_API_KEY` / `ALIBABA_API_SECRET` / `ALIBABA_API_BASE`, which differ from the names in `.env.example` (`SUPABASE_SECRET_KEY`, `ALIBABA_APP_KEY`, and so on). Set the names the code actually reads in your hosting environment, or unify them, before relying on the sync.
 
 ## Important files
 
