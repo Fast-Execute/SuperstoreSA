@@ -25,7 +25,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
+          # No `cache: npm` here: it requires a committed package-lock.json, and this repo doesn't have one yet.
+          # Once you commit a lockfile, add `cache: npm` back and switch the next step to `npm ci`.
       - name: Install dependencies
         run: npm install
       # `next build` also runs the TypeScript type check.
