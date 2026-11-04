@@ -24,7 +24,8 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          # @supabase/supabase-js 2.118+ requires Node >= 22. Use Node 22 in production hosting too.
+          node-version: 22
           # No `cache: npm` here: it requires a committed package-lock.json, and this repo doesn't have one yet.
           # Once you commit a lockfile, add `cache: npm` back and switch the next step to `npm ci`.
       - name: Install dependencies
