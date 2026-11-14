@@ -1,11 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { requireAdmin } from '@/lib/supabase/server';
+import { getSupabaseServiceKey, getSupabaseUrl } from '@/lib/config';
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
-  process.env.SUPABASE_SERVICE_ROLE_KEY || ''
-);
+const supabase = createClient(getSupabaseUrl(), getSupabaseServiceKey());
 
 // Orders hold customer names, phone numbers and addresses, so only admins may list them.
 export async function GET(request: NextRequest) {

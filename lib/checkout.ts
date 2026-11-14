@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { MAX_LINE_QUANTITY } from './cart';
+import { getSupabaseServiceKey, getSupabaseUrl } from './config';
 import { validateCheckoutForm } from './checkout-validation';
 
 export type CheckoutItem = {
@@ -30,10 +31,10 @@ const MAX_ORDER_LINES = 50;
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 function getAdminClient() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const url = getSupabaseUrl();
+  const key = getSupabaseServiceKey();
   if (!url || !key) {
-    throw new Error('Supabase is not configured: NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required.');
+    throw new Error('Supabase is not configured: a Supabase URL and a service/secret key are required.');
   }
   return createClient(url, key);
 }

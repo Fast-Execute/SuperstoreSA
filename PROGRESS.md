@@ -1,9 +1,9 @@
 # SuperstoreSA — Build Progress
 
-**Progress: 58%**
+**Progress: 64%**
 
 ```
-[██████████████████████░░░░░░░░░░░░░░░░] 58%
+[████████████████████████░░░░░░░░░░░░░░] 64%
 ```
 
 ## Completed
@@ -38,6 +38,11 @@
 - [x] Storefront order schema and supplier-order persistence
 - [x] Local checkout order creation API
 - [x] Order retrieval API
+- [x] Full cart drawer and cart page (persistent, stock-aware quantity limits)
+- [x] Checkout form with shared client/server validation (SA phone, 4-digit postcode, provinces)
+- [x] Order confirmation page (orders are saved as pending; no payment taken yet)
+- [x] Order endpoints locked to admins, and row level security enabled on order tables (migration 003)
+- [x] Unit tests for cart and checkout validation logic
 
 ## Remaining
 - [ ] Connect production Supabase project and run migrations
@@ -45,14 +50,14 @@
 - [ ] Authorized Alibaba supplier connector
 - [ ] Live product import
 - [ ] Inventory synchronization
-- [ ] Full cart drawer/page
 - [ ] Customer accounts
-- [ ] Checkout UX and payment provider
+- [ ] Payment provider (checkout currently saves orders as pending)
+- [ ] Live end-to-end test of cart, checkout and order creation against a real Supabase project
 - [ ] Shipping/fulfilment
 - [ ] Orders and returns
 - [ ] Promotions/coupons
 - [ ] Analytics
-- [ ] Security and production hardening
+- [ ] Security and production hardening (rate limiting on checkout, order access for customers)
 - [ ] Automated tests and CI
 - [ ] Deployment/domain
 
