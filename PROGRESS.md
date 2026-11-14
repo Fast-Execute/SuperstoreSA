@@ -1,6 +1,10 @@
 # SuperstoreSA — Build Progress
 
-**Overall progress: 58%**
+**Progress: 58%**
+
+```
+[██████████████████████░░░░░░░░░░░░░░░░] 58%
+```
 
 ## Completed
 - [x] Repository identified and verified

@@ -1,5 +1,13 @@
 # SuperstoreSA
 
+**Progress: 58%**
+
+```
+[██████████████████████░░░░░░░░░░░░░░░░] 58%
+```
+
+See [PROGRESS.md](PROGRESS.md) for the full checklist.
+
 South African online superstore foundation with a local Alibaba dropshipping integration layer.
 
 ## What this repo includes
