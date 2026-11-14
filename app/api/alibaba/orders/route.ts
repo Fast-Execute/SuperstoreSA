@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { AlibabaClient } from '@/lib/alibaba';
+import { requireAdmin } from '@/lib/supabase/server';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL || '',
@@ -13,6 +14,12 @@ function asNumber(value: unknown, fallback = 0): number {
 }
 
 export async function POST(request: NextRequest) {
+  // Placing a supplier order spends real money, so only admins may trigger it.
+  const { authorized } = await requireAdmin();
+  if (!authorized) {
+    return NextResponse.json({ error: 'Admin authentication required' }, { status: 401 });
+  }
+
   try {
     const body = await request.json().catch(() => ({}));
     const { orderId, items, customer, shipping } = body as {
