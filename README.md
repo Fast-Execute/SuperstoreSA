@@ -1,9 +1,9 @@
 # SuperstoreSA
 
-**Progress: 64%**
+**Progress: 66%**
 
 ```
-[████████████████████████░░░░░░░░░░░░░░] 64%
+[█████████████████████████░░░░░░░░░░░░░] 66%
 ```
 
 See [PROGRESS.md](PROGRESS.md) for the full checklist.

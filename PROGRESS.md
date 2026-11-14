@@ -1,9 +1,9 @@
 # SuperstoreSA — Build Progress
 
-**Progress: 64%**
+**Progress: 66%**
 
 ```
-[████████████████████████░░░░░░░░░░░░░░] 64%
+[█████████████████████████░░░░░░░░░░░░░] 66%
 ```
 
 ## Completed
@@ -43,9 +43,9 @@
 - [x] Order confirmation page (orders are saved as pending; no payment taken yet)
 - [x] Order endpoints locked to admins, and row level security enabled on order tables (migration 003)
 - [x] Unit tests for cart and checkout validation logic
+- [x] Supabase project (SuperstoreSA) restored; catalogue, Alibaba and order migrations applied and RLS enabled on order tables (verified via migration list)
 
 ## Remaining
-- [ ] Connect production Supabase project and run migrations
 - [ ] Persistent admin catalogue CRUD
 - [ ] Authorized Alibaba supplier connector
 - [ ] Live product import
@@ -57,6 +57,7 @@
 - [ ] Orders and returns
 - [ ] Promotions/coupons
 - [ ] Analytics
+- [ ] Enable RLS on product_syncs, sync_jobs and order_fulfillments, which are still open to the public key
 - [ ] Security and production hardening (rate limiting on checkout, order access for customers)
 - [ ] Automated tests and CI
 - [ ] Deployment/domain
